@@ -21,6 +21,7 @@ class JsonApiError extends BaseObject implements JsonSerializable
     public $source;
     public $meta = [];
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $base = [
