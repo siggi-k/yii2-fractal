@@ -53,12 +53,12 @@ class JsonApiPaginator extends Pagination implements PaginatorInterface
     /**
      * @var boolean
      * Indicate, should paginator provide absolute urls or relative
-    */
+     */
     public $absoluteUrls = true;
 
     /**
      * @var int calculated current page number
-    */
+     */
     private $_page;
 
     public function init()
@@ -68,32 +68,32 @@ class JsonApiPaginator extends Pagination implements PaginatorInterface
         $this->pageParam = 'number';
     }
 
-    public function getCurrentPage()
+    public function getCurrentPage(): int
     {
         return $this->getPage();
     }
 
-    public function getLastPage()
+    public function getLastPage(): int
     {
         return $this->getPageCount();
     }
 
-    public function getTotal()
+    public function getTotal(): int
     {
         return $this->totalCount;
     }
 
-    public function getCount()
+    public function getCount(): int
     {
         return $this->itemsCount;
     }
 
-    public function getPerPage()
+    public function getPerPage(): int
     {
         return $this->getPageSize();
     }
 
-    public function getUrl($page)
+    public function getUrl($page): string
     {
         return $this->createUrl($page);
     }
