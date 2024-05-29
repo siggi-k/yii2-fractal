@@ -1,6 +1,6 @@
 {
-	"name": "insolita/yii2-fractal",
-	"description": "Json-api spec implementation with league/fractal",
+	"name": "php-openapi/yii2-fractal",
+	"description": "Json-api spec implementation with league/fractal, forked from Insolita (RIP)",
 	"keywords": [
 		"yii2",
 		"rest",
