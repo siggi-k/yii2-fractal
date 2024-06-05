@@ -1,13 +1,13 @@
 # yii2-fractal   Beta
 
-![yii2-fractal](https://github.com/Insolita/yii2-fractal/workflows/yii2-fractal/badge.svg)
+![yii2-fractal](https://github.com/php-openapi/yii2-fractal/workflows/yii2-fractal/badge.svg)
 
 The set of utils and actions for prepare Rest API accordingly JSON:Api https://jsonapi.org/format/
 With https://fractal.thephpleague.com
 
 ### Installation
 
-`composer require insolita/yii2-fractal`
+`composer require php-openapi/yii2-fractal`
 
 ### Usage
 
