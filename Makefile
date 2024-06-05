@@ -1,6 +1,6 @@
 PHPARGS=-dmemory_limit=64M
-#PHPARGS=-dmemory_limit=64M -dzend_extension=xdebug.so -dxdebug.remote_enable=1 -dxdebug.remote_host=127.0.0.1 -dxdebug.remote_autostart=1
-#PHPARGS=-dmemory_limit=64M -dxdebug.remote_enable=1
+#PHPARGS=-dmemory_limit=64M -dzend_extension=xdebug.so -dxdebug.mode=debug -dxdebug.remote_host=127.0.0.1 -dxdebug.start_with_request=yes
+#PHPARGS=-dmemory_limit=64M -dxdebug.mode=debug
 
 all:
 
@@ -24,9 +24,9 @@ clean_all:
 
 up:
 	docker-compose up -d
-	chmod +rw -R tests/tmp
-	chmod +rw -R tests/codeception
-	mkdir -p tests/testapp/runtime && chmod +rw -R tests/testapp/runtime
+	docker-compose run --rm php bash -c 'chmod +rw -R tests/tmp'
+	docker-compose run --rm php bash -c 'chmod +rw -R tests/codeception'
+	docker-compose run --rm php bash -c 'mkdir -p tests/testapp/runtime && chmod +rw -R tests/testapp/runtime'
 
 cli:
 	docker-compose exec php bash
