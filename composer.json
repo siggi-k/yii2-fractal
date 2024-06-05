@@ -10,7 +10,7 @@
 	"type": "library",
 	"license": "MIT",
 	"require": {
-		"php":            ">=7.1.0",
+		"php":            ">=7.4.0",
 		"ext-json": "*",
 		"league/fractal": "^0.20.0",
 		"yiisoft/yii2":   "~2.0.15"
