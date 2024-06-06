@@ -33,7 +33,7 @@ After changing the PHP Version you need to run `make clean_all up` to start the 
 Example:
 
 ```
-$ echo "PHP_VERSION=7.4" > .env
+$ echo "PHP_VERSION=8.1" > .env
 $ make clean_all up cli
 Stopping yii2-openapi_php_1      ... done # TODO
 Stopping yii2-openapi_maria_1    ... done
@@ -53,10 +53,10 @@ docker-compose exec php bash
 
 root@f9928598f841:/app# php -v
 
-PHP 7.4.27 (cli) (built: Jan 26 2022 18:08:44) ( NTS )
+PHP 8.1.27 (cli) (built: Jan 26 2022 18:08:44) ( NTS )
 Copyright (c) The PHP Group
 Zend Engine v3.4.0, Copyright (c) Zend Technologies
-with Zend OPcache v7.4.27, Copyright (c), by Zend Technologies
+with Zend OPcache v8.1.27, Copyright (c), by Zend Technologies
 with Xdebug v2.9.6, Copyright (c) 2002-2020, by Derick Rethans
 ```
 

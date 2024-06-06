@@ -1,4 +1,4 @@
-FROM yiisoftware/yii2-php:7.4-apache
+FROM yiisoftware/yii2-php:8.0-apache
 
 ENV INSIDE_DOCKER=1
 
