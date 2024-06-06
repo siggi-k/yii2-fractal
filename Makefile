@@ -19,7 +19,7 @@ test:
 	php $(PHPARGS) vendor/bin/codecept run
 
 clean_all:
-	docker-compose down
+	docker-compose down --remove-orphans
 	sudo rm -rf tests/tmp/*
 
 up:
