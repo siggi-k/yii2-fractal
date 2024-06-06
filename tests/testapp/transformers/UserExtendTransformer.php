@@ -13,13 +13,13 @@ class UserExtendTransformer extends TransformerAbstract
      * Resources that can be included if requested.
      * @var array
      */
-    protected $availableIncludes = ['comments'];
+    protected array $availableIncludes = ['comments'];
 
     /**
      * Include resources without needing it to be requested.
      * @var array
      */
-    protected $defaultIncludes = ['posts'];
+    protected array $defaultIncludes = ['posts'];
 
     public function transform(User $user)
     {
