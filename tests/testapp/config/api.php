@@ -63,7 +63,7 @@ return [
                 [
                     'class' => yii\log\FileTarget::class,
                     'levels' => ['error', 'warning'],
-                    'logFile' => '@runtime/error.log',
+                    'logFile' => '/tmp/yii2-fractal-test-error.log',
                     'logVars' => ['_GET', '_POST']
                 ],
             ],

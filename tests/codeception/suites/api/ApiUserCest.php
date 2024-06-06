@@ -122,7 +122,7 @@ class ApiUserCest
         $I->amBearerAuthenticated('Gamma_secret_token');
         $I->sendHEAD('/me/posts-count');
         $I->seeResponseCodeIsSuccessful();
-        $I->seeHttpHeader('X-Pagination-Total-Count', 18);
+        $I->seeHttpHeader('X-Pagination-Total-Count', '18');
     }
 
 }

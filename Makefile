@@ -27,6 +27,8 @@ up:
 	docker-compose run --rm php bash -c 'chmod +rw -R tests/tmp'
 	docker-compose run --rm php bash -c 'chmod +rw -R tests/codeception'
 	docker-compose run --rm php bash -c 'mkdir -p tests/testapp/runtime && chmod +rw -R tests/testapp/runtime'
+	docker-compose run --rm php bash -c 'chmod -R 777 tests/testapp/runtime' # TODO avoid 777
+
 
 cli:
 	docker-compose exec php bash
