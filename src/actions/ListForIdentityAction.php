@@ -113,6 +113,7 @@ class ListForIdentityAction extends JsonApiAction
     protected function prepareParentQuery(ActiveQueryInterface $query):ActiveQueryInterface
     {
         $userId = Yii::$app->user->id;
+        $condition = [];
         $condition[$this->modelTable().'.'.$this->userIdAttribute] = $userId;
         $query->where($condition);
         return $query;

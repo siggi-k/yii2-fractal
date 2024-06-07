@@ -24,5 +24,15 @@ return [
             'password' => 'dbpass',
             'charset' => 'utf8',
         ],
+        'log' => [
+            'traceLevel' => 3,
+            'targets' => [
+                [
+                    'class' => yii\log\FileTarget::class,
+                    'logFile' => '/tmp/yii2-fractal-test-error.log',
+                    'logVars' => ['_GET', '_POST']
+                ],
+            ],
+        ],
     ],
 ];

@@ -58,11 +58,10 @@ return [
             'validationErrorFormat' => JsonApiErrorHandler::ERROR_FORMAT_SPEC
         ],
         'log' => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'traceLevel' => 3,
             'targets' => [
                 [
                     'class' => yii\log\FileTarget::class,
-                    'levels' => ['error', 'warning'],
                     'logFile' => '/tmp/yii2-fractal-test-error.log',
                     'logVars' => ['_GET', '_POST']
                 ],
