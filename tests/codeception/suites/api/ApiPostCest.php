@@ -8,11 +8,11 @@ class ApiPostCest
         $I->amBearerAuthenticated('Delta_secret_token');
         $I->sendHEAD('/post/count');
         $I->seeResponseCodeIs(204);
-        $I->seeHttpHeader('X-Pagination-Total-Count', 54);
+        $I->seeHttpHeader('X-Pagination-Total-Count', '54');
 
         $I->sendHEAD('/post/count', ['filter'=>['category_id'=>['neq'=>3]]]);
         $I->seeResponseCodeIs(204);
-        $I->seeHttpHeader('X-Pagination-Total-Count', 36);
+        $I->seeHttpHeader('X-Pagination-Total-Count', '36');
     }
 
     public function testCountPostsForCategoryAction(ApiTester $I)
@@ -21,10 +21,10 @@ class ApiPostCest
         $I->amBearerAuthenticated('Delta_secret_token');
         $I->sendHEAD('/categories/1/posts-count');
         $I->seeResponseCodeIs(204);
-        $I->seeHttpHeader('X-Pagination-Total-Count', 18);
+        $I->seeHttpHeader('X-Pagination-Total-Count', '18');
         $I->sendHEAD('/categories/2/posts-count');
         $I->seeResponseCodeIs(204);
-        $I->seeHttpHeader('X-Pagination-Total-Count', 0);
+        $I->seeHttpHeader('X-Pagination-Total-Count', '0');
     }
 
     public function testListHasDataWithRelationships(ApiTester $I)
@@ -53,10 +53,10 @@ class ApiPostCest
 
         $I->sendHEAD('/post');
         $I->seeResponseCodeIs(200);
-        $I->seeHttpHeader('X-Pagination-Total-Count', 54);
-        $I->seeHttpHeader('X-Pagination-Current-Page', 1);
-        $I->seeHttpHeader('X-Pagination-Per-Page', 20);
-        $I->seeHttpHeader('X-Pagination-Page-Count', 3);
+        $I->seeHttpHeader('X-Pagination-Total-Count', '54');
+        $I->seeHttpHeader('X-Pagination-Current-Page', '1');
+        $I->seeHttpHeader('X-Pagination-Per-Page', '20');
+        $I->seeHttpHeader('X-Pagination-Page-Count', '3');
     }
 
     public function testListFilterWithNotAllowedAttrs(ApiTester $I)
