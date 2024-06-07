@@ -64,11 +64,11 @@ class JsonApiActiveDataProvider extends ActiveDataProvider implements JsonApiDat
                 throw new InvalidArgumentException('Only JsonApiPaginator instance or false allowed');
             }
             $this->_pagination->totalCount = $this->getTotalCount();
-        } elseif ($value instanceof JsonApiPaginator || $value === false) {
+        } elseif ($value instanceof JsonApiPaginator) {
             $this->_pagination = $value;
-            if ($value instanceof JsonApiPaginator) {
-                $this->_pagination->totalCount = $this->getTotalCount();
-            }
+            $this->_pagination->totalCount = $this->getTotalCount();
+        } elseif ($value === false) {
+            $this->_pagination = false;
         } else {
             throw new InvalidArgumentException('Only JsonApiPaginator instance, configuration array or false is allowed.');
         }
