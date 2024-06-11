@@ -23,49 +23,43 @@ make test
 
 ### Switching PHP versions
 
+While development, you might need to support multiple versions of PHP. You can run tests locally in a Docker container in a different PHP version.
 
 You can switch the PHP version of the docker runtime by changing the `PHP_VERSION` environment variable in the `.env` file.
 
 If you have no `.env` file yet, create it by copying `.env.dist` to `.env`.
 
-After changing the PHP Version you need to run `make clean_all up` to start the new container with new version.
+After changing the PHP Version you need to run `make clean_all up cli` or `make down up cli` to start the new container with new version.
 
 Example:
 
 ```
-$ echo "PHP_VERSION=8.1" > .env
-$ make clean_all up cli
-Stopping yii2-openapi_php_1      ... done # TODO
-Stopping yii2-openapi_maria_1    ... done
-Stopping yii2-openapi_postgres_1 ... done
-Stopping yii2-openapi_mysql_1    ... done
-Removing yii2-openapi_php_1      ... done
-Removing yii2-openapi_maria_1    ... done
-Removing yii2-openapi_postgres_1 ... done
-Removing yii2-openapi_mysql_1    ... done
-Removing network yii2-openapi_default
-Creating network "yii2-openapi_default" with driver "bridge"
-Creating yii2-openapi_maria_1    ... done
-Creating yii2-openapi_mysql_1    ... done
-Creating yii2-openapi_postgres_1 ... done
-Creating yii2-openapi_php_1      ... done
+$ echo "PHP_VERSION=8.2" > .env
+$ make down up cli
+docker-compose down --remove-orphans
+Stopping yii2-fractal_php_1   ... done
+Stopping yii2-fractal_pgsql_1 ... done
+Removing yii2-fractal_php_1   ... done
+Removing yii2-fractal_pgsql_1 ... done
+Removing network yii2-fractal_default
+docker-compose build
+...
+...
+...
+docker-compose up -d
+...
+...
+...
 docker-compose exec php bash
+        _ _  __                                             _
+       (_|_)/ _|                                           | |
+  _   _ _ _| |_ _ __ __ _ _ __ ___   _____      _____  _ __| | __
+ | | | | | |  _| '__/ _` | '_ ` _ \ / _ \ \ /\ / / _ \| '__| |/ /
+ | |_| | | | | | | | (_| | | | | | |  __/\ V  V / (_) | |  |   <
+  \__, |_|_|_| |_|  \__,_|_| |_| |_|\___| \_/\_/ \___/|_|  |_|\_\
+   __/ |
+  |___/
 
-root@f9928598f841:/app# php -v
-
-PHP 8.1.27 (cli) (built: Jan 26 2022 18:08:44) ( NTS )
-Copyright (c) The PHP Group
-Zend Engine v3.4.0, Copyright (c) Zend Technologies
-with Zend OPcache v8.1.27, Copyright (c), by Zend Technologies
-with Xdebug v2.9.6, Copyright (c) 2002-2020, by Derick Rethans
+PHP version: 8.2.20
+root@713d31b5ed8c:/app#
 ```
-
-
-
-
- ### Testing # todo remove
-
-  - Clone project
-  - Run `make up`
-  - Run once `make installdocker`
-  - Run `make testdocker` or `make cli` and inside docker env `make test`
