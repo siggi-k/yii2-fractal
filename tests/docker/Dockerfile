@@ -1,4 +1,8 @@
-FROM yiisoftware/yii2-php:8.0-apache
+ARG BUILD_PHP_VERSION
+
+FROM yiisoftware/yii2-php:${BUILD_PHP_VERSION}-apache
+
+ARG BUILD_PHP_VERSION
 
 ENV INSIDE_DOCKER=1
 

@@ -1,7 +1,10 @@
 version: "3.5"
 services:
     php:
-        build: tests/docker
+        build:
+            context: tests/docker
+            args:
+              - BUILD_PHP_VERSION=${PHP_VERSION}
         volumes:
             - ./tests/tmp/.composer:/root/.composer:rw
             - .:/app
