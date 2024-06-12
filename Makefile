@@ -1,5 +1,5 @@
 PHPARGS=-dmemory_limit=64M
-#PHPARGS=-dmemory_limit=64M -dzend_extension=xdebug.so -dxdebug.mode=debug -dxdebug.remote_host=127.0.0.1 -dxdebug.start_with_request=yes
+#PHPARGS=-dmemory_limit=64M -dzend_extension=xdebug.so -dxdebug.mode=debug -dxdebug.client_host=127.0.0.1 -dxdebug.start_with_request=yes
 #PHPARGS=-dmemory_limit=64M -dxdebug.mode=debug
 
 all:
