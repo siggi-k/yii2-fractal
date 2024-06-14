@@ -113,6 +113,7 @@ class ListForIdentityAction extends JsonApiAction
     protected function prepareParentQuery(ActiveQueryInterface $query):ActiveQueryInterface
     {
         $userId = Yii::$app->user->id;
+        $condition = [];
         $condition[$this->modelTable().'.'.$this->userIdAttribute] = $userId;
         $query->where($condition);
         return $query;
@@ -142,7 +143,7 @@ class ListForIdentityAction extends JsonApiAction
             $query->andWhere($filter);
         }
 
-        $dataProvider = Yii::createObject($this->dataProvider);
+        $dataProvider = Yii::createObject($this->dataProvider, ['query' => $query]);
         if (!$dataProvider instanceof JsonApiActiveDataProvider && !$dataProvider instanceof CursorActiveDataProvider) {
             throw new InvalidConfigException('Invalid dataProvider configuration');
         }

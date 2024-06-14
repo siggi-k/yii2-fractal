@@ -12,7 +12,7 @@ use League\Fractal\TransformerAbstract;
 
 class PostShortTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = [
+    protected array $availableIncludes = [
         'author', 'category'
     ];
 
@@ -26,8 +26,8 @@ class PostShortTransformer extends TransformerAbstract
         $author = $post->author;
 
         return $this->item($author, function(User $author){
-            return $author->getAttributes(['id', 'username', 'email', 'created_at']);
-        }, 'users') + ['links'=>['self'=>'/users/'.$author->id]];
+            return $author->getAttributes(['id', 'username', 'email', 'created_at']) + ['links'=>['self'=>'/users/'.$author->id]];
+        }, 'users');
     }
 
 

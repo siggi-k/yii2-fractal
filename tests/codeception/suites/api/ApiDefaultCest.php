@@ -100,7 +100,8 @@ class ApiDefaultCest
         $I->seeResponseCodeIsServerError();
         $I->seeResponseIsJsonApiError();
         $I->seeResponseHasMeta();
-        $I->seeResponseContainsJson(['title' => 'PHP Warning', 'detail' => 'json_decode() expects parameter 1 to be string, array given']);
-        $I->seeResponseContainsJson(['meta' => ['error_type' => "yii\\base\\ErrorException"]]);
+        // $I->seeResponseContainsJson(['title' => 'PHP Warning', 'detail' => 'json_decode() expects parameter 1 to be string, array given']);
+        // $I->seeResponseContainsJson(['meta' => ['error_type' => "yii\\base\\ErrorException"]]);
+        $I->seeResponseContainsJson(['meta' => ['error_type' => "TypeError"]]);
     }
 }

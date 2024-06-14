@@ -151,7 +151,7 @@ class ApiCategoryCest
             ]
         ]);
         $selfLink = $I->grabDataFromResponseByJsonPath('$.links.self');
-        $I->assertContains('sort=-name', $selfLink[0]);
+        $I->assertStringContainsString('sort=-name', $selfLink[0]);
     }
 
     public function testCreateInvalidFormat1(ApiTester $I)

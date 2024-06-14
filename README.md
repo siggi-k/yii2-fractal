@@ -2,7 +2,7 @@
 
 ![yii2-fractal](https://github.com/php-openapi/yii2-fractal/workflows/yii2-fractal/badge.svg)
 
-The set of utils and actions for prepare Rest API accordingly JSON:Api https://jsonapi.org/format/
+The set of utils and actions for prepare Rest API accordingly JSON:API https://jsonapi.org/format/
 With https://fractal.thephpleague.com
 
 ### Installation
@@ -21,10 +21,13 @@ With https://fractal.thephpleague.com
  
 ['bootstrap' section]: https://www.yiiframework.com/doc/guide/2.0/en/runtime-bootstrapping
  
- ### Testing
- 
-  - Clone project
-  - Run `make up` 
-  - Run once `make installdocker`
-  - Run `make testdocker` or `make cli` and inside docker env `make test`
-  
+
+
+### Contributing / Local Development / Testing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) file
+
+
+### License
+
+See [LICENSE](LICENSE) file

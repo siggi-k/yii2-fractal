@@ -148,7 +148,7 @@ class ListAction extends JsonApiAction
             $query->andWhere($filter);
         }
 
-        $dataProvider = Yii::createObject($this->dataProvider);
+        $dataProvider = Yii::createObject($this->dataProvider, ['query' => $query]);
         if (!$dataProvider instanceof JsonApiActiveDataProvider && !$dataProvider instanceof CursorActiveDataProvider) {
             throw new InvalidConfigException('Invalid dataProvider configuration');
         }
