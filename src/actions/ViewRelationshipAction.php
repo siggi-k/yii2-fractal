@@ -110,13 +110,20 @@ class ViewRelationshipAction extends JsonApiAction
      */
     private function resolveHasMany(ActiveQueryInterface $relation)
     {
-        $dataProvider = Yii::createObject($this->dataProvider);
+        /**
+         * For the dataProvider to create a TotalCount for pagination, query must be passed first.
+         * @see \yii\data\ActiveDataProvider::prepareTotalCount
+         */
+        $dataProvider = Yii::createObject(array_merge(
+            ['query' => $relation],
+            $this->dataProvider,
+            ['resourceKey' => $this->resourceKey],
+            ['transformer' => $this->transformer],
+        ));
         if (!$dataProvider instanceof JsonApiActiveDataProvider && !$dataProvider instanceof CursorActiveDataProvider) {
             throw new InvalidConfigException('Invalid dataProvider configuration');
         }
-        $dataProvider->query = $relation;
-        $dataProvider->resourceKey = $this->resourceKey;
-        $dataProvider->transformer = $this->transformer;
+
         $dataProvider->setSort(['params' => Yii::$app->getRequest()->getQueryParams()]);
 
         if ($this->prepareDataProvider !== null) {
