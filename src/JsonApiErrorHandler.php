@@ -70,7 +70,6 @@ class JsonApiErrorHandler extends ErrorHandler
 
     protected function renderException($exception)
     {
-        Yii::error($exception);
         if (Yii::$app->has('response')) {
             $response = Yii::$app->getResponse();
             // reset parameters of response to avoid interference with partially created response data
