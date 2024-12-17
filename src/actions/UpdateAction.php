@@ -59,9 +59,8 @@ class UpdateAction extends JsonApiAction
      * It must return a string representing the scenario to be assigned to the model before it is validated and updated.
      *  The signature of the callable should be as follows,
      *  ```php
-     *  function ($action, $model = null) {
+     *  function ($action, $model) {
      *      // $model is the requested model instance.
-     *      // If null, it means no specific model (e.g. CreateAction)
      *  }
      *  ```
      */

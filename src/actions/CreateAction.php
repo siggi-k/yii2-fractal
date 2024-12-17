@@ -58,9 +58,8 @@ class CreateAction extends JsonApiAction
      * It must return a string representing the scenario to be assigned to the model before it is validated and saved.
      *  The signature of the callable should be as follows,
      *  ```php
-     *  function ($action, $model = null) {
+     *  function ($action, $model) {
      *      // $model is the requested model instance.
-     *      // If null, it means no specific model (e.g. CreateAction)
      *  }
      *  ```
      */
@@ -110,9 +109,10 @@ class CreateAction extends JsonApiAction
         }
 
         /* @var $model \yii\db\ActiveRecord */
-        $model = new $this->modelClass([
-            'scenario' => is_callable($this->scenario) ? call_user_func($this->scenario, $this->id) : $this->scenario,
-        ]);
+        $model = new $this->modelClass();
+        $model->setScenario(is_callable($this->scenario) ?
+            call_user_func($this->scenario, $this->id, $model) : $this->scenario
+        );
         RelationshipManager::validateRelationships($model, $this->getResourceRelationships(), $this->allowedRelations);
         $model->load($this->getResourceAttributes(), '');
         if ($this->isParentRestrictionRequired()) {
