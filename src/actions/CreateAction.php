@@ -29,9 +29,10 @@ class CreateAction extends JsonApiAction
 {
     use HasResourceTransformer;
     use HasParentAttributes;
+
     /**
      * @var array
-     *  * Configuration for attaching relationships
+     * Configuration for attaching relationships
      * Should contains key - relation name and array with
      *             idType - php type of resource ids for validation
      *             validator = callback for custom id validation
@@ -44,12 +45,24 @@ class CreateAction extends JsonApiAction
      *              $relatedModels = Relation::find()->where(['id' => $ids])->andWhere([additional conditions])->all();
      *              if(count($relatedModels) < $ids) {
      *                throw new HttpException(422, 'Invalid photos ids');
-     *        }],
+     *        }},
      * ]
-    **/
+     **/
+
     public $allowedRelations = [];
+
     /**
-     * @var string the scenario to be assigned to the new model before it is validated and saved.
+     * @var string|callable
+     * string - the scenario to be assigned to the model before it is validated and saved.
+     * callable - a PHP callable that will be executed during the action.
+     * It must return a string representing the scenario to be assigned to the model before it is validated and saved.
+     *  The signature of the callable should be as follows,
+     *  ```php
+     *  function ($action, $model = null) {
+     *      // $model is the requested model instance.
+     *      // If null, it means no specific model (e.g. CreateAction)
+     *  }
+     *  ```
      */
     public $scenario = Model::SCENARIO_DEFAULT;
 
@@ -98,7 +111,7 @@ class CreateAction extends JsonApiAction
 
         /* @var $model \yii\db\ActiveRecord */
         $model = new $this->modelClass([
-            'scenario' => $this->scenario,
+            'scenario' => is_callable($this->scenario) ? call_user_func($this->scenario, $this->id) : $this->scenario,
         ]);
         RelationshipManager::validateRelationships($model, $this->getResourceRelationships(), $this->allowedRelations);
         $model->load($this->getResourceAttributes(), '');

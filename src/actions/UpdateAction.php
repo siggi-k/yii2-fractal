@@ -51,8 +51,19 @@ class UpdateAction extends JsonApiAction
      * ]
      **/
     public $allowedRelations = [];
+
     /**
-     * @var string the scenario to be assigned to the model before it is validated and updated.
+     * @var string|callable
+     * string - the scenario to be assigned to the model before it is validated and updated.
+     * callable - a PHP callable that will be executed during the action.
+     * It must return a string representing the scenario to be assigned to the model before it is validated and updated.
+     *  The signature of the callable should be as follows,
+     *  ```php
+     *  function ($action, $model = null) {
+     *      // $model is the requested model instance.
+     *      // If null, it means no specific model (e.g. CreateAction)
+     *  }
+     *  ```
      */
     public $scenario = Model::SCENARIO_DEFAULT;
     /**
@@ -88,7 +99,8 @@ class UpdateAction extends JsonApiAction
     {
         /* @var $model ActiveRecord */
         $model = $this->isParentRestrictionRequired() ? $this->findModelForParent($id) : $this->findModel($id);
-        $model->scenario = $this->scenario;
+        $model->scenario = is_callable($this->scenario) ?
+            call_user_func($this->scenario, $this->id, $model) : $this->scenario;
         if ($this->checkAccess) {
             call_user_func($this->checkAccess, $this->id, $model);
         }

@@ -23,7 +23,17 @@ class DeleteAction extends JsonApiAction
     use HasParentAttributes;
 
     /**
-     * @var string the scenario to be assigned to the new model before it is validated and saved.
+     * @var string|callable
+     * string - the scenario to be assigned to the model before it is validated and saved.
+     * callable - a PHP callable that will be executed during the action.
+     * It must return a string representing the scenario to be assigned to the model before it is validated and saved.
+     *  The signature of the callable should be as follows,
+     *  ```php
+     *  function ($action, $model = null) {
+     *      // $model is the requested model instance.
+     *      // If null, it means no specific model (e.g. CreateAction)
+     *  }
+     *  ```
      */
     public $scenario = Model::SCENARIO_DEFAULT;
 
@@ -56,7 +66,9 @@ class DeleteAction extends JsonApiAction
             throw new ForbiddenHttpException('Update with relationships not supported yet');
         }
         $model = $this->isParentRestrictionRequired() ? $this->findModelForParent($id) : $this->findModel($id);
-        $model->setScenario($this->scenario);
+        $model->setScenario(is_callable($this->scenario) ?
+            call_user_func($this->scenario, $this->id, $model) : $this->scenario
+        );
         if ($this->checkAccess) {
             call_user_func($this->checkAccess, $this->id, $model);
         }
