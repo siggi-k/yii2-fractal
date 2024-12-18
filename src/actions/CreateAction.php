@@ -40,15 +40,15 @@ class CreateAction extends JsonApiAction
      * Keep it empty for disable this ability
      * @see https://jsonapi.org/format/#crud-creating
      * @example
-     *  'allowedRelations' => [
-     *       'author' => ['idType' => 'integer'],
-     *       'photos' => ['idType' => 'integer', 'validator' => function($model, array $ids) {
-     *              $relatedModels = Relation::find()->where(['id' => $ids])->andWhere([additional conditions])->all();
-     *              if(count($relatedModels) < $ids) {
-     *                throw new HttpException(422, 'Invalid photos ids');
-     *            }
-     *        },
-     * ]
+     *     'allowedRelations' => [
+     *         'author' => ['idType' => 'integer'],
+     *         'photos' => ['idType' => 'integer', 'validator' => function($model, array $ids) {
+     *             $relatedModels = Relation::find()->where(['id' => $ids])->andWhere([additional conditions])->all();
+     *             if (count($relatedModels) < $ids) {
+     *                 throw new HttpException(422, 'Invalid photos ids');
+     *             }
+     *         },
+     *     ]
      */
 
     public $allowedRelations = [];
