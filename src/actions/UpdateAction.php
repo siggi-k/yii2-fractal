@@ -68,7 +68,21 @@ class UpdateAction extends JsonApiAction
     public $scenario = Model::SCENARIO_DEFAULT;
 
     /**
-     * @var callable|null a PHP callable that checks if updating is allowed.
+     * @var callable|null A PHP callable that will be called to determine
+     * whether the update of a model is allowed. If not set, no update
+     * check will be performed. The callable should have the following signature:
+     *
+     * @example
+     * ```php
+     * function ($action, $model) {
+     *     // $model is the model instance being updated.
+     *
+     *     // If the update is not allowed, an error should be thrown. For example:
+     *     if ($model->status === 'archived') {
+     *         throw new MethodNotAllowedHttpException('The model cannot be updated when its status is "archived".');
+     *     }
+     * }
+     * ```
      */
     public $checkUpdateAllowed;
 
