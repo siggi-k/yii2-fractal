@@ -10,6 +10,7 @@ namespace insolita\fractal\actions;
 use Closure;
 use Yii;
 use yii\base\Model;
+use yii\base\InvalidConfigException;
 use yii\web\ForbiddenHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -65,12 +66,20 @@ class DeleteAction extends JsonApiAction
             throw new ForbiddenHttpException('Update with relationships not supported yet');
         }
         $model = $this->isParentRestrictionRequired() ? $this->findModelForParent($id) : $this->findModel($id);
-        $model->setScenario(is_callable($this->scenario) ?
-            call_user_func($this->scenario, $this->id, $model) : $this->scenario
-        );
+
+        if (is_string($this->scenario)) {
+            $scenario = $this->scenario;
+        } elseif (is_callable($this->scenario)) {
+            $scenario = call_user_func($this->scenario, $this->id, $model);
+        } else {
+            throw new InvalidConfigException('The "scenario" property must be defined either as a string or as a callable.');
+        }
+        $model->setScenario($scenario);
+
         if ($this->checkAccess) {
             call_user_func($this->checkAccess, $this->id, $model);
         }
+
         if ($model->delete() === false) {
             throw new ServerErrorHttpException('Failed to delete the object for unknown reason.');
         }

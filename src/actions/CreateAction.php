@@ -16,6 +16,7 @@ use Yii;
 use yii\base\Model;
 use yii\db\ActiveRecordInterface;
 use yii\helpers\Url;
+use yii\base\InvalidConfigException;
 use yii\web\ServerErrorHttpException;
 use function array_keys;
 use function call_user_func;
@@ -111,9 +112,16 @@ class CreateAction extends JsonApiAction
 
         /* @var $model \yii\db\ActiveRecord */
         $model = new $this->modelClass();
-        $model->setScenario(is_callable($this->scenario) ?
-            call_user_func($this->scenario, $this->id, $model) : $this->scenario
-        );
+
+        if (is_string($this->scenario)) {
+            $scenario = $this->scenario;
+        } elseif (is_callable($this->scenario)) {
+            $scenario = call_user_func($this->scenario, $this->id, $model);
+        } else {
+            throw new InvalidConfigException('The "scenario" property must be defined either as a string or as a callable.');
+        }
+        $model->setScenario($scenario);
+
         RelationshipManager::validateRelationships($model, $this->getResourceRelationships(), $this->allowedRelations);
         $model->load($this->getResourceAttributes(), '');
         if ($this->isParentRestrictionRequired()) {

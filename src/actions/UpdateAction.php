@@ -15,6 +15,7 @@ use Throwable;
 use Yii;
 use yii\base\Model;
 use yii\db\ActiveRecord;
+use yii\base\InvalidConfigException;
 use yii\web\ServerErrorHttpException;
 
 /**
@@ -98,11 +99,20 @@ class UpdateAction extends JsonApiAction
     {
         /* @var $model ActiveRecord */
         $model = $this->isParentRestrictionRequired() ? $this->findModelForParent($id) : $this->findModel($id);
-        $model->scenario = is_callable($this->scenario) ?
-            call_user_func($this->scenario, $this->id, $model) : $this->scenario;
+
+        if (is_string($this->scenario)) {
+            $scenario = $this->scenario;
+        } elseif (is_callable($this->scenario)) {
+            $scenario = call_user_func($this->scenario, $this->id, $model);
+        } else {
+            throw new InvalidConfigException('The "scenario" property must be defined either as a string or as a callable.');
+        }
+        $model->setScenario($scenario);
+
         if ($this->checkAccess) {
             call_user_func($this->checkAccess, $this->id, $model);
         }
+
         $originalModel = clone $model;
         RelationshipManager::validateRelationships($model, $this->getResourceRelationships(), $this->allowedRelations);
         if (empty($this->getResourceAttributes()) && $this->hasResourceRelationships()) {
