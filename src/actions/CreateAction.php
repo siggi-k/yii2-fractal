@@ -16,6 +16,7 @@ use Yii;
 use yii\base\Model;
 use yii\db\ActiveRecordInterface;
 use yii\helpers\Url;
+use yii\base\InvalidConfigException;
 use yii\web\ServerErrorHttpException;
 use function array_keys;
 use function call_user_func;
@@ -29,27 +30,40 @@ class CreateAction extends JsonApiAction
 {
     use HasResourceTransformer;
     use HasParentAttributes;
+
     /**
      * @var array
-     *  * Configuration for attaching relationships
+     * Configuration for attaching relationships
      * Should contains key - relation name and array with
      *             idType - php type of resource ids for validation
      *             validator = callback for custom id validation
      * Keep it empty for disable this ability
      * @see https://jsonapi.org/format/#crud-creating
      * @example
-     *  'allowedRelations' => [
-     *       'author' => ['idType' => 'integer'],
-     *       'photos' => ['idType' => 'integer', 'validator' => function($model, array $ids) {
-     *              $relatedModels = Relation::find()->where(['id' => $ids])->andWhere([additional conditions])->all();
-     *              if(count($relatedModels) < $ids) {
-     *                throw new HttpException(422, 'Invalid photos ids');
-     *        }],
-     * ]
-    **/
+     *     'allowedRelations' => [
+     *         'author' => ['idType' => 'integer'],
+     *         'photos' => ['idType' => 'integer', 'validator' => function($model, array $ids) {
+     *             $relatedModels = Relation::find()->where(['id' => $ids])->andWhere([additional conditions])->all();
+     *             if (count($relatedModels) < $ids) {
+     *                 throw new HttpException(422, 'Invalid photos ids');
+     *             }
+     *         },
+     *     ]
+     */
+
     public $allowedRelations = [];
+
     /**
-     * @var string the scenario to be assigned to the new model before it is validated and saved.
+     * @var string|callable
+     * string - the scenario to be assigned to the model before it is validated and saved.
+     * callable - a PHP callable that will be executed during the action.
+     * It must return a string representing the scenario to be assigned to the model before it is validated and saved.
+     *  The signature of the callable should be as follows,
+     *  ```php
+     *  function ($action, $model) {
+     *      // $model is the requested model instance.
+     *  }
+     *  ```
      */
     public $scenario = Model::SCENARIO_DEFAULT;
 
@@ -97,9 +111,17 @@ class CreateAction extends JsonApiAction
         }
 
         /* @var $model \yii\db\ActiveRecord */
-        $model = new $this->modelClass([
-            'scenario' => $this->scenario,
-        ]);
+        $model = new $this->modelClass();
+
+        if (is_string($this->scenario)) {
+            $scenario = $this->scenario;
+        } elseif (is_callable($this->scenario)) {
+            $scenario = call_user_func($this->scenario, $this->id, $model);
+        } else {
+            throw new InvalidConfigException('The "scenario" property must be defined either as a string or as a callable.');
+        }
+        $model->setScenario($scenario);
+
         RelationshipManager::validateRelationships($model, $this->getResourceRelationships(), $this->allowedRelations);
         $model->load($this->getResourceAttributes(), '');
         if ($this->isParentRestrictionRequired()) {

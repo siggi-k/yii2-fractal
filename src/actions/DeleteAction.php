@@ -10,6 +10,7 @@ namespace insolita\fractal\actions;
 use Closure;
 use Yii;
 use yii\base\Model;
+use yii\base\InvalidConfigException;
 use yii\web\ForbiddenHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -23,7 +24,16 @@ class DeleteAction extends JsonApiAction
     use HasParentAttributes;
 
     /**
-     * @var string the scenario to be assigned to the new model before it is validated and saved.
+     * @var string|callable
+     * string - the scenario to be assigned to the model before it is validated and saved.
+     * callable - a PHP callable that will be executed during the action.
+     * It must return a string representing the scenario to be assigned to the model before it is validated and saved.
+     *  The signature of the callable should be as follows,
+     *  ```php
+     *  function ($action, $model) {
+     *      // $model is the requested model instance.
+     *  }
+     *  ```
      */
     public $scenario = Model::SCENARIO_DEFAULT;
 
@@ -56,10 +66,20 @@ class DeleteAction extends JsonApiAction
             throw new ForbiddenHttpException('Update with relationships not supported yet');
         }
         $model = $this->isParentRestrictionRequired() ? $this->findModelForParent($id) : $this->findModel($id);
-        $model->setScenario($this->scenario);
+
+        if (is_string($this->scenario)) {
+            $scenario = $this->scenario;
+        } elseif (is_callable($this->scenario)) {
+            $scenario = call_user_func($this->scenario, $this->id, $model);
+        } else {
+            throw new InvalidConfigException('The "scenario" property must be defined either as a string or as a callable.');
+        }
+        $model->setScenario($scenario);
+
         if ($this->checkAccess) {
             call_user_func($this->checkAccess, $this->id, $model);
         }
+
         if ($model->delete() === false) {
             throw new ServerErrorHttpException('Failed to delete the object for unknown reason.');
         }

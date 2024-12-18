@@ -15,6 +15,7 @@ use Throwable;
 use Yii;
 use yii\base\Model;
 use yii\db\ActiveRecord;
+use yii\base\InvalidConfigException;
 use yii\web\ServerErrorHttpException;
 
 /**
@@ -51,8 +52,18 @@ class UpdateAction extends JsonApiAction
      * ]
      **/
     public $allowedRelations = [];
+
     /**
-     * @var string the scenario to be assigned to the model before it is validated and updated.
+     * @var string|callable
+     * string - the scenario to be assigned to the model before it is validated and updated.
+     * callable - a PHP callable that will be executed during the action.
+     * It must return a string representing the scenario to be assigned to the model before it is validated and updated.
+     *  The signature of the callable should be as follows,
+     *  ```php
+     *  function ($action, $model) {
+     *      // $model is the requested model instance.
+     *  }
+     *  ```
      */
     public $scenario = Model::SCENARIO_DEFAULT;
     /**
@@ -88,10 +99,20 @@ class UpdateAction extends JsonApiAction
     {
         /* @var $model ActiveRecord */
         $model = $this->isParentRestrictionRequired() ? $this->findModelForParent($id) : $this->findModel($id);
-        $model->scenario = $this->scenario;
+
+        if (is_string($this->scenario)) {
+            $scenario = $this->scenario;
+        } elseif (is_callable($this->scenario)) {
+            $scenario = call_user_func($this->scenario, $this->id, $model);
+        } else {
+            throw new InvalidConfigException('The "scenario" property must be defined either as a string or as a callable.');
+        }
+        $model->setScenario($scenario);
+
         if ($this->checkAccess) {
             call_user_func($this->checkAccess, $this->id, $model);
         }
+
         $originalModel = clone $model;
         RelationshipManager::validateRelationships($model, $this->getResourceRelationships(), $this->allowedRelations);
         if (empty($this->getResourceAttributes()) && $this->hasResourceRelationships()) {
