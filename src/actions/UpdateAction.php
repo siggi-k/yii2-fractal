@@ -66,6 +66,12 @@ class UpdateAction extends JsonApiAction
      *  ```
      */
     public $scenario = Model::SCENARIO_DEFAULT;
+
+    /**
+     * @var callable|null a PHP callable that checks if updating is allowed.
+     */
+    public $checkUpdateAllowed;
+
     /**
      * @var callable|Closure Callback after save model with all relations
      * @example
@@ -74,6 +80,7 @@ class UpdateAction extends JsonApiAction
      * }
      */
     public $afterSave = null;
+
     /**
      * @throws \yii\base\InvalidConfigException
      */
@@ -111,6 +118,10 @@ class UpdateAction extends JsonApiAction
 
         if ($this->checkAccess) {
             call_user_func($this->checkAccess, $this->id, $model);
+        }
+
+        if ($this->checkUpdateAllowed) {
+            call_user_func($this->checkUpdateAllowed, $this->id, $model);
         }
 
         $originalModel = clone $model;

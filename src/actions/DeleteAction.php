@@ -38,6 +38,11 @@ class DeleteAction extends JsonApiAction
     public $scenario = Model::SCENARIO_DEFAULT;
 
     /**
+     * @var callable|null a PHP callable that checks if deletion is allowed.
+     */
+    public $checkDeleteAllowed;
+
+    /**
      * @var callable|Closure Callback after save model with all relations
      * @example
      *   'afterDelete' => function ($model) {
@@ -78,6 +83,10 @@ class DeleteAction extends JsonApiAction
 
         if ($this->checkAccess) {
             call_user_func($this->checkAccess, $this->id, $model);
+        }
+
+        if ($this->checkDeleteAllowed) {
+            call_user_func($this->checkDeleteAllowed, $this->id, $model);
         }
 
         if ($model->delete() === false) {
