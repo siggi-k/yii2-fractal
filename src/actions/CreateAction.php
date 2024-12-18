@@ -45,9 +45,10 @@ class CreateAction extends JsonApiAction
      *              $relatedModels = Relation::find()->where(['id' => $ids])->andWhere([additional conditions])->all();
      *              if(count($relatedModels) < $ids) {
      *                throw new HttpException(422, 'Invalid photos ids');
-     *        }},
+     *            }
+     *        },
      * ]
-     **/
+     */
 
     public $allowedRelations = [];
 
